@@ -13,11 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.devblocks42.vaultchat.R;
+import com.devblocks42.vaultchat.Utils;
 import com.devblocks42.vaultchat.crypto.KeyManager;
 import com.devblocks42.vaultchat.dto.RegisterRequest;
 import com.devblocks42.vaultchat.dto.RegisterResponse;
 import com.devblocks42.vaultchat.repositories.AuthRepository;
 
+import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -47,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
         EditText password1 = findViewById(R.id.inputPassword);
         EditText password2 = findViewById(R.id.inputPassword2);
         EditText email = findViewById(R.id.inputEmail);
-        EditText passphrase = findViewById(R.id.inputPassphrase);
         RegisterRequest registerRequest = new RegisterRequest();
         KeyManager keyManager = new KeyManager();
         keyManager.generateECDSAKeyPair();
@@ -64,13 +65,18 @@ public class RegisterActivity extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "Compte créé", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Erreur : " + response.message(), Toast.LENGTH_SHORT).show();
+                    try {
+                        String errors = Utils.parseError(response.errorBody().string());
+                        Toast.makeText(RegisterActivity.this, "Erreur : " + errors, Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
-                Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

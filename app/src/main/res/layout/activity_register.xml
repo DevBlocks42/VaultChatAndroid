@@ -10,6 +10,12 @@
         android:padding="24dp"
         android:id="@+id/main">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enregistrer un nouveau compte" />
+
         <EditText
             android:id="@+id/inputUsername"
             android:layout_width="match_parent"
@@ -34,13 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Confirmation du mot de passe"
-            android:inputType="textPassword"/>
-
-        <EditText
-            android:id="@+id/inputPassphrase"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Passphrase"
             android:inputType="textPassword"/>
 
         <Button
